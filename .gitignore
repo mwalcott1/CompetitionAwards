@@ -1,0 +1,5 @@
+unfilledCerts/*.png
+*.csv
+__pycache__
+__pycache__/*
+printables/*
