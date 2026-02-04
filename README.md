@@ -4,6 +4,7 @@ This tool is owned by Miles Walcott, who retains full privileges of ownership of
 Others are allowed to use the code in this tool for personal use, or for use pertaining to official WCA (World Cube Association) competitions.
 Others are not allowed to use this tool for personal or monetary gain of any form.
 By using this tool, you agree not to hold the owner responsible for any damages caused by its usage.
+I claim a Creative Commons license for this tool, whatever that means. There's a copy of what that entails in here somewhere.
 
 
 ## Usage
@@ -30,6 +31,9 @@ Newcomer Podium certificates
 Please contact me (details below) if you'd like support for more certificates to be added. Please note that the newcomerCerts, podiumCerts, and partCerts directories should be kept empty for intended results.
 
 Currently, most of the world's alphabets (by users) are supported by this tool. If you run into a character not supported, a message will be printed to the terminal including that character. Please contact me (details below) and I can add support for that family of characters/symbols.
+
+### Bonus tool: competitionCardsShifter
+This one is pretty simple - I got annoyed with Groupifier printing competitor cards too close to the top margin which would then get cut off by my printer. I am unaware if this is an issue for similar softwares (e.g. Delegate Dashboard), but this tool, when run like the other ones, shifts an inputted PDF down by the inputted number of pixels. It should work for any PDF file, you just input the filepath (without quotation marks) (either relative or absolute path) and the number of pixels, and it saves the result file to the same directory as the original one.
 
 
 ## Contact
