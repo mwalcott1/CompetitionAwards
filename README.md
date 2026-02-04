@@ -4,7 +4,7 @@ This tool is owned by Miles Walcott, who retains full privileges of ownership of
 Others are allowed to use the code in this tool for personal use, or for use pertaining to official WCA (World Cube Association) competitions.
 Others are not allowed to use this tool for personal or monetary gain of any form.
 By using this tool, you agree not to hold the owner responsible for any damages caused by its usage.
-I claim a Creative Commons license for this tool, whatever that means. There's a copy of what that entails in here somewhere.
+I claim a Creative Commons license for this tool, specifically CC BY-NC-SA.
 
 
 ## Usage
