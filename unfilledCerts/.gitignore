@@ -1,0 +1,8 @@
+# This directory left empty by intention.
+# For certificate compilation to work, you should have base (unfilled)
+# certificates in this directory, with the names 1.png, 2.png, 3.png, and part.png
+# for 1st places, 2nd places, 3rd places, and participation certificates.
+# If you'd like to use one certificate for multiple of these, just copy it
+# and rename.
+*
+!.gitignore

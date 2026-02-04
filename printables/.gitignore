@@ -1,0 +1,4 @@
+# This directory left empty by intention.
+# Rendered certificates will be put here
+*
+!.gitignore

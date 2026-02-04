@@ -1,0 +1,6 @@
+# This directory left empty by intention.
+# Please don't add any files here as it may mess up certificate compilation
+# Especially not .png files
+# Ideally just use some other folder for any desired storage
+*
+!.gitignore
