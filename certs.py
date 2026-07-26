@@ -292,9 +292,10 @@ def fontForChar(char):
         # look, but you could move noto above it if you like that font or are substituting fonts.
         # Less common languages are towards the bottom so we don't have to parse the entire .ttf
         # file for Thai every time we print an english character
+        "noto", #reordered
         "germ",
         "fetty",
-        "noto",
+        # "noto",
         # past here are non-english fonts
         "notosc",
         "notodv",
@@ -316,9 +317,10 @@ def fontForChar(char):
     # need to reorder the other to avoid unexpected behavior (nothing should break
     # but you'll print in a different font than you want)
     fonts = [
+        "fonts/NotoSerif-Bold.ttf", # reordered
         "fonts/Plain Germanica.ttf",
         "fonts/FetteUNZFraktur.ttf",
-        "fonts/NotoSerif-Bold.ttf",
+        # "fonts/NotoSerif-Bold.ttf",
         "fonts/NotoSerifSC-Bold.ttf",
         "fonts/NotoSerifDevanagari-Bold.ttf",
         "fonts/NotoSerifTamil-Bold.ttf",
@@ -527,7 +529,7 @@ def podiumCerts(event):
 
         # draw event name
         eventFontSize = 80
-        I1.text((imgW//2, eventH), eventToName(eventId), font=font("germ", eventFontSize), fill=(0, 0, 0), anchor='mm')
+        I1.text((imgW//2, eventH), eventToName(eventId), font=font("noto", eventFontSize), fill=(0, 0, 0), anchor='mm')
 
         # load and draw event icon (x2)
         iconSize = 200
@@ -561,7 +563,7 @@ def podiumCerts(event):
             # this is really cursed sorry
             mbldCharLengths = []
             mbldFonts = []
-            mbldFontMain = font("germ", resultFontSize)
+            mbldFontMain = font("noto", resultFontSize) # original germ
             mbldFontBackup = font("times", resultFontSize)
             for char in resultText:
                 # write all but the '/' in Plain Germanic, and the '/' in Times New Roman
@@ -590,8 +592,8 @@ def podiumCerts(event):
             if result < 6000:
                 resultText = f'with a result of {result/100:.2f} seconds'
             elif result < 360000:
-                resultText = f'with a result of {int(result//6000)}:{(result % 6000)/100:.2f}'
-        I1.text((imgW//2, resultH), resultText, font=font("germ", resultFontSize), fill=(0, 0, 0), anchor='mm')
+                resultText = f'with a result of {int(result//6000)}:{((result % 6000)/100):05.2f}'
+        I1.text((imgW//2, resultH), resultText, font=font("noto", resultFontSize), fill=(0, 0, 0), anchor='mm') #originally germ
         # save certificate
         img.save(f"podiumCerts/{eventId}p{i}{name.replace(' ', '')}.png")
 
@@ -633,7 +635,7 @@ def newcomerCerts(event):
 
         eventFontSize = 80
         eventText = eventToName(eventId) + " Newcomer"  # this + " Newcomer" is the mentioned only difference
-        I1.text((imgW//2, eventH), eventText, font=font("germ", eventFontSize), fill=(0, 0, 0), anchor='mm')
+        I1.text((imgW//2, eventH), eventText, font=font("noto", eventFontSize), fill=(0, 0, 0), anchor='mm')
 
         iconSize = 200
         icon = Image.open(f'icons/{event[0]}.png').resize((iconSize, iconSize))
@@ -682,7 +684,7 @@ def newcomerCerts(event):
                 resultText = f'with a result of {result/100:.2f} seconds'
             elif result < 360000:
                 resultText = f'with a result of {int(result//6000)}:{(result % 6000)/100:.2f}'
-        I1.text((imgW//2, resultH), resultText, font=font("germ", resultFontSize), fill=(0, 0, 0), anchor='mm')
+        I1.text((imgW//2, resultH), resultText, font=font("noto", resultFontSize), fill=(0, 0, 0), anchor='mm')
         img.save(f"newcomerCerts/{eventId}p{i}{name.replace(' ', '')}.png")
 
 
@@ -704,7 +706,7 @@ if __name__ == "__main__":
     data, filename = awards.parseInput()
 
     # participation certs
-    toggle = input("Generate participation certificates? (y/[n=something else]): ")
+    toggle = input("\nGenerate participation certificates? (y/[n=something else]): ")
     if toggle == 'y':
         people = awards.getPeople(data)  # get list of all competitors
         print("\nGenerating participation certificates")
@@ -715,7 +717,7 @@ if __name__ == "__main__":
         # combines them all to one pdf
         # note: if there are any png files in ./partCerts, they will be included in the pdf. Beware.
         folder_path = './partCerts'
-        images = [os.path.join(folder_path, file) for file in os.listdir(folder_path) if file.endswith(".png")]
+        images = [os.path.join(folder_path, file) for file in sorted(os.listdir(folder_path)) if file.endswith(".png")]
         if images != []:
             with open(f"printables/{filename[:-11]}PartCerts.pdf", "wb") as f:
                 f.write(img2pdf.convert(images))
@@ -736,9 +738,9 @@ if __name__ == "__main__":
         for event in podiums:
             podiumCerts(event)
         folder_path = './podiumCerts'
-        images = [os.path.join(folder_path, file) for file in os.listdir(folder_path) if file.endswith(".png")]
+        images = [os.path.join(folder_path, file) for file in sorted(os.listdir(folder_path)) if file.endswith(".png")]
         if images != []:
-            with open(f"printables/{filename[:-11]}PartCerts.pdf", "wb") as f:
+            with open(f"printables/{filename[:-11]}PodiumCerts.pdf", "wb") as f:
                 f.write(img2pdf.convert(images))
         else:
             print("\nNo podium certificates to make.")
@@ -756,9 +758,9 @@ if __name__ == "__main__":
         for event in podiums:
             newcomerCerts(event)
         folder_path = './newcomerCerts'
-        images = [os.path.join(folder_path, file) for file in os.listdir(folder_path) if file.endswith(".png")]
+        images = [os.path.join(folder_path, file) for file in sorted(os.listdir(folder_path)) if file.endswith(".png")]
         if images != []:
-            with open(f"printables/{filename[:-11]}PartCerts.pdf", "wb") as f:
+            with open(f"printables/{filename[:-11]}NewcomerCerts.pdf", "wb") as f:
                 f.write(img2pdf.convert(images))
         else:
             print("\nNo newcomer podium certificates to make.")

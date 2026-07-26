@@ -17,18 +17,26 @@ import os
 # Asks user for the live ID (currently four digits, maybe five soon?)
 # and returns a 2D data array and the filename data is stored in
 def parseInput():
-    comp = input("Enter live ID (NOT competitionID): ")
+    comp = input("Enter live ID (NOT competitionID, e.g. 10277): ")
     try:
         comp = int(comp)
-        filename = export_fast.fetch(comp)
+        filename = export_fast.fetchResults(comp)
     # please don't enter nonintegers
     except ValueError:
         print("Invalid input: the live ID is the 4 (possibly 5) digits at the end of the WCA Live URL")
         sys.exit()
-    # this triggers if the comp is on Live but no results entered yet
+    # this triggers if no results entered for the comp yet on Live
     if filename is None:
-        print("\nNo results found for that competition. Try checking back later.\n")
-        sys.exit()
+        comp = input("\nNo results found for that competition. Try entering the competition ID (e.g. RockyMountainChampionship2026): ")
+        try:
+            filename = export_fast.fetchRegs(comp)
+        except:
+            print("FETCHREGS THREW EXCEPTION. BAD. BAD.")
+        if filename is None:
+            print("Couldn't find competition. Exiting.")
+            sys.exit()
+        else:
+            print("WARNING: Be aware that you won't be able to print awards, as no results are available.")
 
     # load data from csv exported by export_fast into 2D array
     try:
