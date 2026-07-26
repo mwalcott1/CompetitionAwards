@@ -688,6 +688,71 @@ def newcomerCerts(event):
         img.save(f"newcomerCerts/{eventId}p{i}{name.replace(' ', '')}.png")
 
 
+# generate the certificates for top three SOR finishers. Same procedure as previous two, more or less
+def sorCerts():
+    sorRanks = awards.getSOR(data)
+    if sorRanks[0] == []:
+        # h2h final or no rankings is the only way this happens I think
+        print(f'SOR rankings invalid - possibly no results?')
+        return
+
+    for i in range(min(3, len(sorRanks))):
+ 
+        # get details to put on cert
+        name = sorRanks[i][0]
+        id = "NULL"
+        country = ""
+        for row in data:
+            if row[3] == name:
+                id = row[4]
+                country = row[5]
+                break
+        if id == "":
+            id = "Newcomer"
+    
+        # open and draw the base certificate
+        try:
+            img = Image.open(f'unfilledCerts/{i+1}.png')
+        except FileNotFoundError:
+            print(f"Couldn't find a file for podium place {i+1}. Exception thrown")
+            sys.exit()
+        imgW, _ = img.size
+        I1 = ImageDraw.Draw(img)
+    
+        # draw name text (complicated so it uses a helper function)
+        w = printName(name, I1, imgW, nameH)
+    
+        # draw ID or Newcomer
+        I1.text(((imgW + w)//2 + 100, nameH), id, font=font("times", 40), fill=(0, 0, 0), anchor='lm')
+   
+        # load flag, determine placement, and draw
+        flag = Image.open(f'h80/{iocToIso2(country)}.png')
+        flagW, flagH = flag.size
+        img.paste(flag, (int((imgW - w)//2 - 100 - flagW), nameH - flagH//2))
+    
+        # draw event name
+        eventFontSize = 80
+        I1.text((imgW//2, eventH), "Sum of Ranks", font=font("noto", eventFontSize), fill=(0, 0, 0), anchor='mm')
+    
+        # load and draw event icon (x2)
+        iconSize = 200
+        # load event icon and scale as determined above
+        icon = Image.open('icons/miniguild.png').resize((iconSize, iconSize))  # mguild used as an all-rounding icon
+        # apply icon, left then right
+        img.paste(icon, (iconW - iconSize//2, iconH), icon)
+        img.paste(icon, (imgW - iconW - iconSize//2, iconH), icon)
+    
+        # result text
+        # determine ranked result and translate to text
+        result = None
+        resultFontSize = 60
+        resultText = f'with an SOR of {sorRanks[i][1]}'
+
+        I1.text((imgW//2, resultH), resultText, font=font("noto", resultFontSize), fill=(0, 0, 0), anchor='mm') #originally germ
+        # save certificate
+        img.save(f"sorCerts/SORp{i+1}{name.replace(' ', '')}.png")
+
+
 if __name__ == "__main__":
 
     # raqm needed to display some languages properly
@@ -765,6 +830,22 @@ if __name__ == "__main__":
         else:
             print("\nNo newcomer podium certificates to make.")
         files = glob.glob('./newcomerCerts/*.png')
+        for file in files:
+            os.remove(file)
+        print("Done")
+
+    # generate SOR certificates
+    toggle = input("\nGenerate SOR certificates? (y/[n=something else]): ")
+    if toggle == 'y':
+        sorCerts()  # make SOR certs
+        folder_path = './sorCerts'
+        images = [os.path.join(folder_path, file) for file in sorted(os.listdir(folder_path)) if file.endswith(".png")]
+        if images != []:
+            with open(f"printables/{filename[:-11]}SorCerts.pdf", "wb") as f:
+                f.write(img2pdf.convert(images))
+        else:
+            print("\nNo podium certificates to make.")
+        files = glob.glob('./sorCerts/*.png')
         for file in files:
             os.remove(file)
         print("Done")
